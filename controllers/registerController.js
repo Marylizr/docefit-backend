@@ -27,7 +27,6 @@ exports.create = async (req, res) => {
   
     const newUser = new User ({
       name: name,
-      surname: surname,
       email: email,
       password: passwordHashed
     });

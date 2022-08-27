@@ -37,30 +37,30 @@ userRouter.get('/:id', async(req, res) => {
 
 userRouter.post("/", async(req, res) => {
 
-    const {name, lastName, email, password} = req.body;
-    
-    const existingUser = await User.findOne( { email: email })
- 
-     if(existingUser) {
-       res.status(409).json({Message:"Username already in use"})
-     } 
- 
-     const errors = validationResult(req);
-     if(!errors.isEmpty()){
-       return res.status(400).json(errors);
-     }
-   
-   
-     const newUser = new User ({
-       name: name,
-       lastName: lastName,
-       email: email,
-       password: password
-     });
-     
-     const userSaved = await newUser.save();
-     return res.status(201).json({ id: userSaved._id  });
-     
+  const { name, email, password} = req.body;
+  const existingUser = await User.findOne( { email: email })
+
+  if(existingUser) {
+    res.status(409).json({Message:"Username already in use"})
+  } 
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json(errors);
+  }
+  const genSalt = 10;
+  const passwordHashed = bcrypt.hashSync(password, genSalt);
+
+  const newUser = new User ({
+    name: name,
+    email: email,
+    password: passwordHashed
+  });
+  const userSaved = await newUser.save();
+
+  const token = jwt.sign({ id: userSaved._id }, process.env.JWT_SECRET, {expiresIn: '1h' });
+  return res.status(201).json({ token: token, id: userSaved._id  });
+  
    });
 
 userRouter.delete('/:id', authMiddleware, async(req, res) => {
