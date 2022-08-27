@@ -2,14 +2,14 @@ const express = require('express');
 require('dotenv').config();
 const app = express();
 const port = 3001;
-const mongo = require('./mongo/index');
+const mongo = require('./src/mongo/index');
 const cors = require('cors');
-const blogRouter = require('./controllers/blogController');
-const userRouter = require('./controllers/userController');
-const commentRouter = require('./controllers/commentController');
-const addProductRouter = require('./controllers/addProductController');
-const loginRouter = require('./controllers/loginController');
-const cartRouter = require('./controllers/cartController');
+const blogRouter = require('./src/controllers/blogController');
+const userRouter = require('./src/controllers/userController');
+const commentRouter = require('./src/controllers/commentController');
+const addProductRouter = require('./src/controllers/addProductController');
+const loginRouter = require('./src/controllers/loginController');
+const cartRouter = require('./src/controllers/cartController');
 
 
 app.use(express.json());
