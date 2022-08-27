@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/docefit');
+const databaseURL = process.env.DATABASE_URL;
+mongoose.connect(databaseURL);
 
 
 const mongo = mongoose.connection;
