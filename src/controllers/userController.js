@@ -3,17 +3,19 @@ const userRouter = express.Router();
 const User = require('../mongo/schema/user');
 const {validationResult} = require("express-validator");
 const {authMiddleware} = require('../auth/authMiddleware')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 
 userRouter.get('/',  async(req, res) => {
-   const allUsers = await User.find().populate('blog');
+   const allUsers = await User.find();
    res.json(allUsers)
 });
 
 userRouter.get('/me',  async(req, res) => {
-    const oneUsers = await User.findOne();
-    res.json(oneUsers)
+    const oneUser = await User.findOne();
+    res.json(oneUser)
  });
 
 userRouter.get('/name/:id', async(req, res) => {
@@ -37,7 +39,7 @@ userRouter.get('/:id', async(req, res) => {
 
 userRouter.post("/", async(req, res) => {
 
-  const { name, email, password} = req.body;
+  const { name, lastName, email, password} = req.body;
   const existingUser = await User.findOne( { email: email })
 
   if(existingUser) {
@@ -53,6 +55,7 @@ userRouter.post("/", async(req, res) => {
 
   const newUser = new User ({
     name: name,
+    lastName: lastName,
     email: email,
     password: passwordHashed
   });
@@ -83,9 +86,10 @@ userRouter.delete('/:id', authMiddleware, async(req, res) => {
  
    const updatedUser = {
      id: id,
-     email: data.email,
      name: data.name,
-     description: data.description,
+     lastName: data.lastName,
+     email: data.email,
+     password: data.password
    };
  
    res.json({message: "Your user has been updated Succesfully", updatedUser})

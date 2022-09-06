@@ -4,8 +4,8 @@ const Cart = require('../mongo/schema/cart');
 
 
 cartRouter.get('/', async(req, res) => {
-   const allfavs = await Cart.find();
-   res.json(allfavs);
+   const allCart = await Cart.find();
+   res.json(allCart);
 })
 
 cartRouter.get('/:id', async(req, res) => {
