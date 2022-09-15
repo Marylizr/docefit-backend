@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const app = express();
-const port = 3001;
+const bodyParser = require('body-parser')
 const mongo = require('./src/mongo/index');
 const cors = require('cors');
 const blogRouter = require('./src/controllers/blogController');
@@ -10,18 +10,21 @@ const commentRouter = require('./src/controllers/commentController');
 const addProductRouter = require('./src/controllers/addProductController');
 const loginRouter = require('./src/controllers/loginController');
 const cartRouter = require('./src/controllers/cartController');
-
-
-app.use(express.json());
+const port = process.env.PORT;
 
 app.use(cors({
   origin: '*',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}))
+  optionsSuccessStatus: 200
+}));
 
-app.listen(3001, () => {
-  console.log(`app listening at http://localhost:${port}`)
-})
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(express.json());
+
+
+const server = app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`)
+});
 
 app.use("/user", userRouter);
 app.use("/blog", blogRouter);

@@ -66,12 +66,12 @@ addProductRouter.patch ('/:id', async(req, res) => {
  
    const updatedProduct = {
       id: id,
-      name: data.name,
-      description: data.description,
-      url:data.url,
-      thumbnailUrl:data.thumbnailUrl,
-      largeImg:data.largeImg,
-      price: data.price
+      type: data.type,
+     price: data.price,
+     description: data.description,
+     title: data.title,
+     format:data.format,
+     thumbnailUrl: data.thumbnailUrl
    };
  
    res.json({message: "Your Product has been updated Succesfully", updatedProduct})

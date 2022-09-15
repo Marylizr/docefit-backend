@@ -39,7 +39,7 @@ userRouter.get('/:id', async(req, res) => {
 
 userRouter.post("/", async(req, res) => {
 
-  const { name, lastName, email, password} = req.body;
+  const { name, lastName, email, password, role} = req.body;
   const existingUser = await User.findOne( { email: email })
 
   if(existingUser) {
@@ -50,19 +50,21 @@ userRouter.post("/", async(req, res) => {
   if(!errors.isEmpty()){
     return res.status(400).json(errors);
   }
+
+  const myPlaintextPassword = 's0/\/\P4$$w0rD';
   const genSalt = 10;
-  const passwordHashed = bcrypt.hashSync(password, genSalt);
+  const passwordHashed = bcrypt.hashSync(myPlaintextPassword, genSalt);
 
   const newUser = new User ({
     name: name,
     lastName: lastName,
     email: email,
-    password: passwordHashed
+    password: passwordHashed, 
   });
   const userSaved = await newUser.save();
 
-  const token = jwt.sign({ id: userSaved._id }, process.env.JWT_SECRET, {expiresIn: '1h' });
-  return res.status(201).json({ token: token, id: userSaved._id  });
+  const token = jwt.sign({ id: userSaved._id, userName: userSaved.name, role: userSaved.role }, process.env.JWT_SECRET, {expiresIn: '1h' });
+  return res.status(201).json({ token: token, id: userSaved._id, userName: userSaved.name, role: userSaved.role  });
   
    });
 

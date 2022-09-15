@@ -9,7 +9,7 @@ loginRouter.post("/", async(req, res) => {
   
    const { email, password } = req.body;
    const user = await User.findOne({ email: email });
-   // const genSalt = 10;
+   const genSalt = 10;
    const checkPassword = bcrypt.compareSync(password, user.password);
  
    if (!user) return res.status(400).send("Email does not exist");
@@ -20,7 +20,6 @@ loginRouter.post("/", async(req, res) => {
  });
  
 module.exports = loginRouter;
-
 
 
 
