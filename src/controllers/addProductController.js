@@ -60,21 +60,14 @@ addProductRouter.delete('/:id', (req, res) => {
 })
 
  
-addProductRouter.patch ('/:id', async(req, res) => {
+addProductRouter.put ('/:id', async(req, res) => {
    const id = req.params.id;
    const data = req.body;
  
-   const updatedProduct = {
-      id: id,
-      type: data.type,
-     price: data.price,
-     description: data.description,
-     title: data.title,
-     format:data.format,
-     thumbnailUrl: data.thumbnailUrl
-   };
+   const updatedProduct = await AddProduct.findOneAndUpdate(id, data)
  
-   res.json({message: "Your Product has been updated Succesfully", updatedProduct})
+   res.status(200).json({message: "Your Product has been updated Succesfully", updatedProduct})
  })
 
 module.exports = addProductRouter;
+
